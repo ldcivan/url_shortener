@@ -14,5 +14,6 @@
   RewriteRule ^(.*)$ /redirect.php?short=$1 [L] 
   </pre>
 
-### 注意
+### 注意/Notice
 * 以Nginx建站的服务器，在上面的假定情况中可尝试将伪静态改为：<code>rewrite ^/(.*)$ /redirect.php?short=$1 last;</code>（未验证）
+* <code>style.css</code>中的内容可根据您自身需求更改
