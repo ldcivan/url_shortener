@@ -57,6 +57,9 @@ if (isset($_GET['short_link'])) {
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
         $original_link = $row['original_link'];
+        if(strpos($url, "http://") !== 0 && strpos($url, "https://") !== 0){
+            $original_link = 'http://'. $original_link;
+        }
         header("Location: $original_link");
         exit();
     }
