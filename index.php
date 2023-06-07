@@ -1,6 +1,6 @@
 <?php
 // 连接数据库
-$conn = mysqli_connect("127.0.0.1", "root", "Ldc123456", "shortener");
+$conn = mysqli_connect("127.0.0.1", "root", "pw", "shortener");
 
 // 检查连接是否成功
 if (!$conn) {
@@ -95,7 +95,7 @@ mysqli_close($conn);
     
     <?php
     // 连接数据库
-    $conn = mysqli_connect("127.0.0.1", "root", "Ldc123456", "shortener");
+    $conn = mysqli_connect("127.0.0.1", "root", "pw", "shortener");
     
     // 检查连接是否成功
     if (!$conn) {
