@@ -3,7 +3,7 @@
 $short_link = $_GET['short'];
 
 // 连接到MySQL数据库
-$conn = mysqli_connect("127.0.0.1", "root", "Ldc123456", "shortener");
+$conn = mysqli_connect("127.0.0.1", "root", "pw", "shortener");
 
 // 查询短链接对应的原始链接
 $sql = "SELECT original_link FROM short_links WHERE short_link='$short_link'";
