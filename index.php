@@ -1,6 +1,6 @@
 <?php
 // 连接数据库
-$conn = mysqli_connect("localhost", "username", "password", "database_name");
+$conn = mysqli_connect("127.0.0.1", "root", "Ldc123456", "shortener");
 
 // 检查连接是否成功
 if (!$conn) {
@@ -32,17 +32,22 @@ if (isset($_POST['u'])||isset($_GET['u'])) {
         $original_link = $_POST['original_link'];
     else
         $original_link = $_GET['u'];
-    $short_link = generate_short_link();
-    
-    $sql = "SELECT COUNT(*) as count FROM short_links WHERE original_link = '$original_link'";
-    $result = mysqli_query($conn, $sql);
-    $row = mysqli_fetch_assoc($result);
-    if ($row['count'] == 0) {
-        $sql = "INSERT INTO short_links (original_link, short_link) VALUES ('$original_link', '$short_link')";
-        mysqli_query($conn, $sql);
-        echo("你的短链：<a href=\"{$short_link}\" target=\"_blank\">http://s.pro-ivan.com/{$short_link}</a>");
-    } else {
-        echo "该网址已经存在于数据库中：<a href=\"{$short_link}\" target=\"_blank\">http://s.pro-ivan.com/{$short_link}</a>";
+    if((strpos($original_link, "http://") !== 0 && strpos($original_link, "https://") !== 0) || !filter_var($original_link, FILTER_VALIDATE_URL)){
+        echo("<script>alert('Make sure your input is a legal link with http:// or https://')</script>");
+    }
+    else{
+        $short_link = generate_short_link();
+        
+        $sql = "SELECT COUNT(*) as count FROM short_links WHERE original_link = '$original_link'";
+        $result = mysqli_query($conn, $sql);
+        $row = mysqli_fetch_assoc($result);
+        if ($row['count'] == 0) {
+            $sql = "INSERT INTO short_links (original_link, short_link) VALUES ('$original_link', '$short_link')";
+            mysqli_query($conn, $sql);
+            echo("Your short link：<a href=\"{$short_link}\" target=\"_blank\">http://s.pro-ivan.com/{$short_link}</a>");
+        } else {
+            echo "The link has been recorded before：<a href=\"{$short_link}\" target=\"_blank\">http://s.pro-ivan.com/{$short_link}</a>";
+        }
     }
 }
 
@@ -57,9 +62,6 @@ if (isset($_GET['short_link'])) {
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
         $original_link = $row['original_link'];
-        if(strpos($url, "http://") !== 0 && strpos($url, "https://") !== 0){
-            $original_link = 'http://'. $original_link;
-        }
         header("Location: $original_link");
         exit();
     }
@@ -93,7 +95,7 @@ mysqli_close($conn);
     
     <?php
     // 连接数据库
-    $conn = mysqli_connect("localhost", "username", "password", "database_name");
+    $conn = mysqli_connect("127.0.0.1", "root", "Ldc123456", "shortener");
     
     // 检查连接是否成功
     if (!$conn) {
@@ -117,7 +119,7 @@ mysqli_close($conn);
     
     <footer>
         <h4><a href="//pro-ivan.com" target="_blank">A <b>FREE</b> URL Shortener Create by Pro-Ivan</a></h4>
-        <p>Type your link in the textarea then click '<b>shorten link</b>', <br>or POST/GET your link to this page with the keyname '<b>u</b>'</p>
+        <p>Type your link in the textarea then click '<b>shorten link</b>', <br>or POST/GET your link to this page with the keyname '<b>u</b>'<br><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="_blank">This website is provided by <img src="/upyun.png" height=18px align="center"> with CDN services</a></p>
     </footer>
 </body>
 </html>
