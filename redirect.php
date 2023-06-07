@@ -3,7 +3,7 @@
 $short_link = $_GET['short'];
 
 // 连接到MySQL数据库
-$conn = mysqli_connect("localhost", "username", "password", "database_name");
+$conn = mysqli_connect("127.0.0.1", "root", "Ldc123456", "shortener");
 
 // 查询短链接对应的原始链接
 $sql = "SELECT original_link FROM short_links WHERE short_link='$short_link'";
@@ -13,9 +13,6 @@ $result = mysqli_query($conn, $sql);
 if (mysqli_num_rows($result) > 0) {
   $row = mysqli_fetch_assoc($result);
   $original_link = $row['original_link'];
-  if(strpos($url, "http://") !== 0 && strpos($url, "https://") !== 0){
-      $original_link = 'http://'. $original_link;
-  }
   header("Location: $original_link");
   exit;
 } else {
