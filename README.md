@@ -19,8 +19,8 @@
   <pre>
   location / {
     if (!-e $request_filename){
-      rewrite ^(.*)$ /redirect.php?short=$1 break;
+      rewrite ^/(.*)$ /redirect.php?short=$1 last;
     }
-  }  
+  } 
   </pre>
 * <code>style.css</code>中的内容可根据您自身需求更改
