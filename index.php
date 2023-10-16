@@ -1,6 +1,6 @@
 <?php
 // 连接数据库
-$conn = mysqli_connect("127.0.0.1", "root", "pw", "shortener");
+$conn = mysqli_connect("127.0.0.1", "root", "password", "shortener");
 
 // 检查连接是否成功
 if (!$conn) {
@@ -32,7 +32,7 @@ if (isset($_POST['u'])||isset($_GET['u'])) {
         $original_link = $_POST['original_link'];
     else
         $original_link = $_GET['u'];
-    if((strpos($original_link, "http://") !== 0 && strpos($original_link, "https://") !== 0) || !filter_var($original_link, FILTER_VALIDATE_URL)){
+    if((strpos($original_link, "http://") !== 0 && strpos($original_link, "https://") !== 0) || filter_var(idn_to_ascii($original_link), FILTER_VALIDATE_URL)!==false){
         echo("<script>alert('Make sure your input is a legal link with http:// or https://')</script>");
     }
     else{
@@ -46,7 +46,10 @@ if (isset($_POST['u'])||isset($_GET['u'])) {
             mysqli_query($conn, $sql);
             echo("Your short link：<a href=\"{$short_link}\" target=\"_blank\">http://s.pro-ivan.com/{$short_link}</a>");
         } else {
-            echo "The link has been recorded before：<a href=\"{$short_link}\" target=\"_blank\">http://s.pro-ivan.com/{$short_link}</a>";
+            $sql = "SELECT * FROM short_links WHERE original_link = '$original_link'";
+            $result = mysqli_query($conn, $sql);
+            $row = mysqli_fetch_assoc($result);
+            echo "The link has been recorded before：<a href=\"{$row['short_link']}\" target=\"_blank\">http://s.pro-ivan.com/{$row['short_link']}</a>";
         }
     }
 }
@@ -95,7 +98,7 @@ mysqli_close($conn);
     
     <?php
     // 连接数据库
-    $conn = mysqli_connect("127.0.0.1", "root", "pw", "shortener");
+    $conn = mysqli_connect("127.0.0.1", "root", "password", "shortener");
     
     // 检查连接是否成功
     if (!$conn) {
