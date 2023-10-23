@@ -32,10 +32,7 @@ if (isset($_POST['u'])||isset($_GET['u'])) {
         $original_link = $_POST['original_link'];
     else
         $original_link = $_GET['u'];
-    if((strpos($original_link, "http://") !== 0 && strpos($original_link, "https://") !== 0) || filter_var(idn_to_ascii($original_link), FILTER_VALIDATE_URL)!==false){
-        echo("<script>alert('Make sure your input is a legal link with http:// or https://')</script>");
-    }
-    else{
+    if(strpos($original_link, "http://") !== false || strpos($original_link, "https://") !== false || filter_var(idn_to_ascii($original_link), FILTER_VALIDATE_URL) !== false){
         $short_link = generate_short_link();
         
         $sql = "SELECT COUNT(*) as count FROM short_links WHERE original_link = '$original_link'";
@@ -51,6 +48,9 @@ if (isset($_POST['u'])||isset($_GET['u'])) {
             $row = mysqli_fetch_assoc($result);
             echo "The link has been recorded before：<a href=\"{$row['short_link']}\" target=\"_blank\">http://s.pro-ivan.com/{$row['short_link']}</a>";
         }
+    }
+    else{
+        echo("<script>alert('Make sure your input is a legal link with http:// or https://".filter_var(idn_to_ascii($original_link), FILTER_VALIDATE_URL)."')</script>");
     }
 }
 
