@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="短链接,链接缩短,在线工具,网站优化,营销工具,Short link,URL shortener,Online tool,Website optimization,Marketing tool,URL shortening service">
+    <meta name="Description" content="A free URL shortening tool. 一个免费的短链站。">
+    <title>URL Shortener - Free URL Shortening Tool</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?88e8bd00155ee9b0b110f6da1b5581bf";
+      var s = document.getElementsByTagName("script")[0]; 
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+</head>
+<body>
+    <h1>URL Shortener<br><small>For a better experience, the shorten function may be down occasionally.</small></h1>
+    
+    <form id="add_form">
+        <label for="original_link">Original Link:</label>
+        <input type="text" name="original_link" id="original_link">
+        <br><br>
+        <input id="add_btn" type="submit" name="u" value="Shorten Link">
+    </form>
+    <div id="add_result"></div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查URL中的GET参数
+            const params = new URLSearchParams(window.location.search);
+            const u = params.get('u');
+        
+            if (u) {
+                // 如果存在有效的字段u，则创建一个新的FormData对象
+                const formData = new FormData();
+                formData.append('original_link', u);
+        
+                // 使用Fetch API发送AJAX请求
+                fetch('add.php', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.text())
+                .then(html => {
+                    // 将返回的HTML插入到页面的特定位置
+                    document.getElementById('add_result').innerHTML = html;
+                    document.getElementById('original_link').innerHTML = '';
+                    document.getElementById('add_btn').value = 'Shorten Link';
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    </script>
+    <script>
+        document.getElementById('add_form').addEventListener('submit', function(event) {
+            event.preventDefault(); // 阻止表单的默认提交行为
+            // 禁用按钮
+            document.getElementById('add_btn').classList.add('disabled');
+            document.getElementById('add_btn').value = 'Shortening';
+
+            // 获取表单数据
+            const formData = new FormData(this);
+
+            // 使用Fetch API发送AJAX请求
+            fetch('add.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.text())
+            .then(html => {
+                // 将返回的HTML插入到页面的特定位置
+                document.getElementById('add_result').innerHTML = html;
+                document.getElementById('original_link').value = '';
+                // 禁用按钮
+                document.getElementById('add_btn').classList.remove('disabled');
+                document.getElementById('add_btn').value = 'Shorten Link';
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+    
+    <br><br>
+    
+
+    <center><p style="font-size: 1.2rem; font-weight: bold; line-height: 1.8;">We have recorded <big id="count">...</big> URLs, thank you for your trust!</p></center>
+    <script>
+    window.onload = function() {
+        // 使用Fetch API发送AJAX请求
+        fetch('count.php', {
+            method: 'GET'
+        })
+        .then(response => response.text())
+        .then(html => {
+            // 将返回的HTML插入到页面的特定位置
+            document.getElementById('count').innerHTML = html;
+        })
+        .catch(error => console.error('Error:', error));
+    };
+    </script>
+    
+    <br><br>
+    <!--
+    <h3>Shortened Links List</h3>
+    <center style="margin-bottom: 14rem">不公开已记录短链，请在记录时自行保存好短链<br>No longer disclose recorded shortened links, please save the shortened links when shortening</center>
+    <div id="list"></div>
+    <script>
+    window.onload = function() {
+        // 使用Fetch API发送AJAX请求
+        fetch('list.php', {
+            method: 'GET'
+        })
+        .then(response => response.text())
+        .then(html => {
+            // 将返回的HTML插入到页面的特定位置
+            document.getElementById('list').innerHTML = html;
+        })
+        .catch(error => console.error('Error:', error));
+    };
+    </script>
+    -->
+    
+    <footer>
+        <div style="display:inline-block;">
+            <h4><a href="//pro-ivan.com" target="_blank">A <b>FREE</b> URL Shortener Created by Pro-Ivan</a></h4>
+            <p>Type your link in the textarea then click '<b>shorten link</b>', <br>GET your link to this page with the keyname '<b>u</b>', <br>or POST your link to /add.php with the keyname '<b>original_link</b>'<br><b>Notice: We'll remove links that have not been active for more than half a year</b><br><a href="https://www.upyun.com/?utm_source=lianmeng&utm_medium=referral" target="_blank">This website is provided by <img src="/upyun.png" height=18px align="center"> with CDN services</a></p>
+        </div>
+        <div style="width:500px;max-width:90%;display:inline-block;margin-left:10px;">
+            <div style="display:inline-flex;align-items:center;">
+                <img src="/sponsor/weixin.webp" style="margin:5px;width:32%;display:inline-block;"><img src="/sponsor/alipay.webp" style="margin:5px;width:32%;display:inline-block;"><img src="/sponsor/paypal.webp" style="margin:5px;width:32%;display:inline-block;"><br>
+            </div>
+            <p style="display:block;margin-top:5px;">Would you like by me cup of milktea?<br><b>And you can contact us via email<br>ldcivan@foxmail.com if necessary!</b></p>
+        </div>
+    </footer>
+</body>
+</html>
